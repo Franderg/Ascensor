@@ -3,7 +3,6 @@
 
 
 module maquina_estados(
-	 input [3:0] boton_pres, //entradas donde se guardan todos los botones de los pisos
 	 //0: nadie ha mandado nada
 	 //1: ir a piso 1
 	 //2: ir a piso 2
@@ -36,6 +35,17 @@ module maquina_estados(
 	reg contador_seg = 0;
 	reg contador_ciclos = 0;
 	reg [3:0] memoria_input;
+	wire [3:0] boton_pres; //entradas donde se guardan todos los botones de los pisos
+	wire piso1;
+	wire piso2;
+	wire piso3;
+	wire piso4;
+	wire S1;
+	wire B2;
+	wire S2;
+	wire B3;
+	wire S3;
+	wire B4;
 	
 	manejo_memoria memory(
     .clk(clk),
@@ -46,6 +56,21 @@ module maquina_estados(
     .piso_m(piso_m), //piso actual
 	 .boton_pres(boton_pres), //boton que se presiona
 	 .memoria(memoria) //registro con la siguiente instruccion para la maquina de estados
+    );
+	 
+	 manejo_entradas entradas(
+	.clk(clk),
+	.piso1(piso1),
+	.piso2(piso2),
+	.piso3(piso3),
+	.piso4(piso4),
+	.S1(S1),
+	.B2(B2),
+	.S2(S2),
+	.B3(B3),
+	.S3(S3),
+	.B4(B4),
+	.boton_pres(boton_pres)
     );
 	
 	always @ (posedge clk or negedge rst)
