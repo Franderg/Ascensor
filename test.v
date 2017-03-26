@@ -8,7 +8,7 @@ module test;
 	reg en;
 	reg clk;
 	reg rst;
-	reg [3:0] memoria;
+	reg [3:0] boton_pres;
 
 	// Outputs
 	wire [1:0] piso;
@@ -16,8 +16,8 @@ module test;
 	wire puertas;
 
 	// Instantiate the Unit Under Test (UUT)
-	maquina_estados uut (
-	   .memoria(memoria),
+	maquina_estados uut(
+	   .boton_pres(boton_pres),
 		.en(en), 
 		.clk(clk), 
 		.rst(rst), 
@@ -26,26 +26,26 @@ module test;
 		.puertas(puertas)
 	);
 
-	initial begin
+initial begin
 		// Initialize Inputs
 		en = 0;
 		clk = 0;
 		rst = 0;
-		memoria <= 0;
+		boton_pres <= 0;
 		#5 rst = 1;
 			en=1;
-		#15 memoria <= 2;
-		#20 memoria <= 2;
-		#20 memoria <= 5;
-		#20 memoria <= 1;
-		#20 memoria <= 2;
-		#20 memoria <= 3;
-		#20 memoria <= 4;
-		#20 memoria <= 4;
-		#20 memoria <= 3;
-		#20 memoria <= 3;
-		#20 memoria <= 0;
-		#20 memoria <= 2;
+		#15 boton_pres <= 2;
+		#20 boton_pres <= 2;
+		#20 boton_pres <= 5;
+		#20 boton_pres <= 1;
+		#20 boton_pres <= 2;
+		#20 boton_pres <= 3;
+		#20 boton_pres <= 4;
+		#20 boton_pres <= 4;
+		#20 boton_pres <= 3;
+		#20 boton_pres <= 3;
+		#20 boton_pres <= 0;
+		#20 boton_pres <= 2;
 	end
 	
 	always

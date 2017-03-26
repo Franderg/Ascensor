@@ -63,9 +63,9 @@ module maquina_estados(
 					agregar = 0;
 					if (contador_seg == 10)
 						begin
-						   accion_m = accion;
-							piso_m = piso;
-							puertas_m = puertas;
+						   accion_m <= accion;
+							piso_m <= piso;
+							puertas_m <= puertas;
 							obtener = 1;
 							#100 obtener = 0;
 							contador_seg = 0;
