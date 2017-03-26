@@ -4,7 +4,7 @@
 
 module test;
 
-	// Inputs
+/*	// Inputs
 	reg en;
 	reg clk;
 	reg rst;
@@ -16,7 +16,7 @@ module test;
 	wire puertas;
 
 	// Instantiate the Unit Under Test (UUT)
-	maquina_estados uut(
+	/*maquina_estados uut(
 		.en(en), 
 		.clk(clk), 
 		.rst(rst), 
@@ -46,13 +46,13 @@ initial begin
 		#20 boton_pres <= 3;
 		#20 boton_pres <= 0;
 		#20 boton_pres <= 2;
-		*/
+		
 	end
 	
 	always
 	begin
 	clk =~ clk;
 	end
-      
+      */
 endmodule
 

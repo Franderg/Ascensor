@@ -17,6 +17,16 @@ module maquina_estados(
     input en, //enable
 	 input clk, //clock
 	 input rst, //reset
+	 input piso1,
+	 input piso2,
+	 input piso3,
+	 input piso4,
+	 input S1,
+	 input B2,
+	 input S2,
+	 input B3,
+	 input S3,
+	 input B4,
     output reg [1:0] piso, //Indica el piso actual, 0, 1, 2, 3
 	 output reg [1:0] accion, //Indica si está subiendo o bajando, 0 no se mueve, 1 sube y 2 baja
 	 output reg puertas //Indica si las puertas están abiertas o cerradas, 0 cerradas, 1 abiertas
@@ -29,23 +39,13 @@ module maquina_estados(
 	reg agregar = 0;
 	reg obtener = 0;
 	reg puertas_m = 0;
-	reg [1:0] accion_m;
-   reg [1:0] piso_m; //piso actual
+	reg [1:0] accion_m = 0;
+   reg [1:0] piso_m = 0; //piso actual
 	wire [3:0] memoria; //registro con la siguiente instruccion para la maquina de estados
 	reg contador_seg = 0;
 	reg contador_ciclos = 0;
 	reg [3:0] memoria_input;
 	wire [3:0] boton_pres; //entradas donde se guardan todos los botones de los pisos
-	wire piso1;
-	wire piso2;
-	wire piso3;
-	wire piso4;
-	wire S1;
-	wire B2;
-	wire S2;
-	wire B3;
-	wire S3;
-	wire B4;
 	
 	manejo_memoria memory(
     .clk(clk),

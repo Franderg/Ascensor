@@ -1,0 +1,27 @@
+
+# PlanAhead Generated IO constraints 
+
+NET "B2" IOSTANDARD = LVCMOS33;
+NET "B4" IOSTANDARD = LVCMOS33;
+NET "B3" IOSTANDARD = LVCMOS33;
+NET "piso1" IOSTANDARD = LVCMOS33;
+NET "piso3" IOSTANDARD = LVCMOS33;
+NET "piso2" IOSTANDARD = LVCMOS33;
+NET "piso4" IOSTANDARD = LVCMOS33;
+NET "rst" IOSTANDARD = LVCMOS33;
+NET "S1" IOSTANDARD = LVCMOS33;
+NET "S2" IOSTANDARD = LVCMOS33;
+
+# PlanAhead Generated physical constraints 
+
+NET "B2" LOC = V8;
+NET "S2" LOC = U8;
+NET "S1" LOC = T5;
+NET "B3" LOC = N8;
+NET "S3" LOC = M8;
+NET "B4" LOC = V9;
+NET "piso1" LOC = C9;
+NET "piso2" LOC = B8;
+NET "piso3" LOC = A8;
+NET "piso4" LOC = D9;
+NET "rst" LOC = C4;
