@@ -20,7 +20,42 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module manejo_entradas(
+	input clk,
+	input piso1,
+	input piso2,
+	input piso3,
+	input piso4,
+	input S1,
+	input B2,
+	input S2,
+	input B3,
+	input S3,
+	input B4,
+	output reg [3:0] boton_pres
     );
 
+always @ (posedge piso1 or posedge piso2 or posedge piso3 or posedge piso4 or posedge S1 or posedge B2 or posedge S2 or posedge B3 or posedge S3 or posedge B4)
+	begin
+		if (piso1 == 1)
+			boton_pres = 1;
+		else if (piso2 == 1)
+			boton_pres = 2;
+		else if (piso3 == 1)
+			boton_pres = 3;
+		else if (piso4 == 1)
+			boton_pres = 4;
+		else if (S1 == 1)
+			boton_pres = 5;
+		else if (B2 == 1)
+			boton_pres = 6;
+		else if (S2 == 1)
+			boton_pres = 7;
+		else if (B3 == 1)
+			boton_pres = 8;
+		else if (S3 == 1)
+			boton_pres = 9;
+		else if (B4 == 1)
+			boton_pres = 10;
+	end
 
 endmodule
