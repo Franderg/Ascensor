@@ -28,6 +28,17 @@ module maquina_estados(
 	reg [1:0] e_actual = P1; //estado actual (piso)
 	reg [1:0] e_siguiente = P1; // estado siguiente
 	
+	manejo_memoria memoria(
+    .clk(clk),
+	 input agregar,
+	 input obtener,
+	 input puertas_m,
+	 input [1:0] accion_m,
+    input [1:0] piso_m, //piso actual
+	 input [3:0] boton_pres, //boton que se presiona
+	 output reg [3:0] memoria //registro con la siguiente instruccion para la maquina de estados
+    );
+	
 	always @ (posedge clk or negedge rst)
 	   begin
 			if(!rst)
@@ -60,7 +71,7 @@ module maquina_estados(
 								2,3,4,6,7,8,9,10:begin
 										piso = 0; //piso1
 										accion = 1; //sube
-										puertas = 0; //cerradas
+										puertas = 0; //cerra	das
 										e_siguiente=P2;
 									end	
 								default:e_siguiente=P1;

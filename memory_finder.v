@@ -23,20 +23,22 @@ module memory_finder(
 	input [3:0] boton,
 	input encontrar,
 	input pila,
-	output encontrado
-    );
+	output reg encontrado,
+	output reg [3:0] indice_encontrado);
 
-parameter contador;
+reg contador = 0;
 
 always @ (posedge encontrar)
    begin
 	   encontrado = 0;
+		indice_encontrado = 11;
 		begin
 			for (contador = 0; contador <= pila; contador = contador + 1)
 				if (RAM[contador] == boton)
-					encontrado = 1;
-			if (encontrado != 1)
-				RAM[pila+1] = boton;
+					begin
+						encontrado = 1;
+						indice_encontrado = contador;
+					end
 		end
 	end
 

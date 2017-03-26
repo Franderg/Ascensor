@@ -20,47 +20,275 @@
 //////////////////////////////////////////////////////////////////////////////////
 module manejo_memoria(
     input clk,
-	 input [1:0] accion,
-    input [1:0] piso, //piso actual
-	 input [3:0] boton, //boton que se presiona
-	 output reg [3:0] memoria, //registro con la siguiente instruccion para la maquina de estados
+	 input agregar,
+	 input obtener,
+	 input puertas_m,
+	 input [1:0] accion_m,
+    input [1:0] piso_m, //piso actual
+	 input [3:0] boton_pres, //boton que se presiona
+	 output reg [3:0] memoria //registro con la siguiente instruccion para la maquina de estados
     );
 
-reg [3:0] RAM [0:255];
-parameter [3:0] anterior;
-parameter count = -1, pila = 0;
+reg [3:0] RAM [0:10];
+reg [3:0] indice_encontrado = 11;
+reg encontrar = 0;
+reg contador = 0;
 
-always @ (posedge clk)
+always @ (posedge agregar)
 	begin
-		if (count==-1) and (boton==0)
-		   begin					
-				count = count+1;
-				RAM[pila] = boton;
-				pila = pila+1;
-				memoria = boton;
-			end
-		else
+		indice_encontrado = 11;
+		for (contador = 0; contador <= 10; contador = contador + 1)
+			if (RAM[contador] == boton_pres)
+				begin
+					indice_encontrado = contador;
+				end
+		if (indice_encontrado == 11)
 			begin
-				if (piso==0)
-					if (boton == 5)
+				for (contador = 0; contador <= 10; contador = contador + 1)
+					if (RAM[contador] == 0)
 						begin
-							if (RAM[count] != 5)
-								
-								
+							RAM[contador] = boton_pres;
+							break;
 						end
-				else if (piso==1)
-				
-				else if (piso==2)
-				
-				else
-				
 			end
-endmodule
-
-
-if (boton!=0)
-
-else
+	end
+	
+always @ (posedge obtener)
 	begin
-		if (RAM[count]!=0)
-			
+		if (piso_m == 0) //piso 1
+			begin
+				if (accion_m == 0) //no se mueve
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 1 || RAM[contador] == 5)
+								begin
+									if (puertas_m == 0)
+										begin
+											indice_encontrado = contador;
+											memoria = RAM[contador];
+										end
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							begin
+								for (contador = 0; contador <= 10; contador = contador + 1)
+									if (RAM[contador] != 0)
+										begin
+											memoria = RAM[contador];
+											indice_encontrado = contador;
+											break;
+										end
+								if (indice_encontrado == 11)
+									memoria = 0;
+							end
+					end
+				else if (accion_m == 1)
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 2 || RAM[contador] == 7)
+								begin																			
+									indice_encontrado = contador;
+									memoria = RAM[contador];
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							begin
+								for (contador = 0; contador <= 10; contador = contador + 1)
+									if (RAM[contador] != 0 || RAM[contador] != 1 || RAM[contador] != 5)
+										begin
+											memoria = RAM[contador];
+											indice_encontrado = contador;
+											break;
+										end
+								if (indice_encontrado == 11)
+									memoria = 0;
+							end
+					end
+			end
+		else if (piso_m == 1) //piso2
+			begin
+				if (accion_m == 0) //no se mueve
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 2 || RAM[contador] == 6 || RAM[contador] == 7)
+								begin
+									if (puertas_m == 0)
+										begin
+											indice_encontrado = contador;
+											memoria = RAM[contador];
+										end
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							begin
+								for (contador = 0; contador <= 10; contador = contador + 1)
+									if (RAM[contador] != 0)
+										begin
+											memoria = RAM[contador];
+											indice_encontrado = contador;
+											break;
+										end
+								if (indice_encontrado == 11)
+									memoria = 0;
+							end
+					end
+				else if (accion_m == 1)
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 3 || RAM[contador] == 9)
+								begin																			
+									indice_encontrado = contador;
+									memoria = RAM[contador];
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							begin
+								for (contador = 0; contador <= 10; contador = contador + 1)
+									if (RAM[contador] == 4 || RAM[contador] == 10 || RAM[contador] == 8)
+										begin
+											memoria = RAM[contador];
+											indice_encontrado = contador;
+											break;
+										end
+								if (indice_encontrado == 11)
+									memoria = 0;
+							end
+					end
+				else if (accion_m == 2)
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 1 || RAM[contador] == 5)
+								begin																			
+									indice_encontrado = contador;
+									memoria = RAM[contador];
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							memoria = 0;
+					end
+			end
+		else if (piso_m==2) //piso 3
+			begin
+				if (accion_m == 0) //no se mueve
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 3 || RAM[contador] == 8 || RAM[contador] == 9)
+								begin
+									if (puertas_m == 0)
+										begin
+											indice_encontrado = contador;
+											memoria = RAM[contador];
+										end
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							begin
+								for (contador = 0; contador <= 10; contador = contador + 1)
+									if (RAM[contador] != 0)
+										begin
+											memoria = RAM[contador];
+											indice_encontrado = contador;
+											break;
+										end
+								if (indice_encontrado == 11)
+									memoria = 0;
+							end
+					end
+				else if (accion_m == 1)
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 4 || RAM[contador] == 10)
+								begin																			
+									indice_encontrado = contador;
+									memoria = RAM[contador];
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							memoria = 0;
+					end
+				else if (accion_m == 2)
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 2 || RAM[contador] == 6)
+								begin																			
+									indice_encontrado = contador;
+									memoria = RAM[contador];
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							begin
+								for (contador = 0; contador <= 10; contador = contador + 1)
+									if (RAM[contador] == 1 || RAM[contador] == 5 || RAM[contador] == 7)
+										begin
+											memoria = RAM[contador];
+											indice_encontrado = contador;
+											break;
+										end
+								if (indice_encontrado == 11)
+									memoria = 0;
+							end
+					end
+			end
+		else //piso 4
+			begin
+				if (accion_m == 0) //no se mueve
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 4 || RAM[contador] == 10)
+								begin
+									if (puertas_m == 0)
+										begin
+											indice_encontrado = contador;
+											memoria = RAM[contador];
+										end
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							begin
+								for (contador = 0; contador <= 10; contador = contador + 1)
+									if (RAM[contador] != 0)
+										begin
+											memoria = RAM[contador];
+											indice_encontrado = contador;
+											break;
+										end
+								if (indice_encontrado == 11)
+									memoria = 0;
+							end
+					end
+				else if (accion_m == 2)
+					begin
+						indice_encontrado = 11;
+						for (contador = 0; contador <= 10; contador = contador + 1)
+							if (RAM[contador] == 3 || RAM[contador] == 8)
+								begin																			
+									indice_encontrado = contador;
+									memoria = RAM[contador];
+									RAM[contador] = 0;
+								end
+						if (indice_encontrado == 11)
+							begin
+								for (contador = 0; contador <= 10; contador = contador + 1)
+									if (RAM[contador] != 0 || RAM[contador] != 4 || RAM[contador] != 10)
+										begin
+											memoria = RAM[contador];
+											indice_encontrado = contador;
+											break;
+										end
+								if (indice_encontrado == 11)
+									memoria = 0;
+							end
+					end
+			end
+	end
+	
+endmodule
