@@ -3,9 +3,13 @@
 
 //deco que pasa de BCD a la salida del display, cada caso es la salida
 
-module bcd_to_display(output reg[6:0] DISPLAY, input [3:0] BCD);
+module bcd_to_display(
+	input clk,
+	output reg[6:0] DISPLAY,
+	input [3:0] BCD
+	);
 
-	always @ (BCD) 
+	always @ (posedge clk) 
 		begin
 			case (BCD)	
 				0:	DISPLAY = 7'b1111110;//  ---- espera

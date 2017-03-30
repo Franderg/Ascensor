@@ -20,8 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 module manejo_memoria(
     input clk,
-	 input agregar,
-	 input obtener,
+	 input LE,
 	 input puertas_m,
 	 input [1:0] accion_m,
     input [1:0] piso_m, //piso actual
@@ -31,15 +30,29 @@ module manejo_memoria(
 
 reg [3:0] RAM [0:11];
 reg [4:0] indice_encontrado = 11;
-reg encontrar = 0;
 integer contador = 0;
 
 
+initial begin
+	RAM[0] = 0;
+	RAM[1] = 0;
+	RAM[2] = 0;
+	RAM[3] = 0;
+	RAM[4] = 0;
+	RAM[5] = 0;
+	RAM[6] = 0;
+	RAM[7] = 0;
+	RAM[8] = 0;
+	RAM[9] = 0;
+	RAM[10] = 0;
+	RAM[11] = 0;
+	memoria = 0;
+end
 	
-	
-always @ (posedge obtener or posedge agregar)
-	if (agregar == 1)
+always @ (posedge clk)
+	if (LE == 1)
 		begin
+			memoria = 0;
 			contador = 0;
 			indice_encontrado = 11;
 			for (contador = 0; contador <= 10; contador = contador + 1)
@@ -57,7 +70,7 @@ always @ (posedge obtener or posedge agregar)
 							end
 				end
 		end
-	else if (obtener == 1)
+	else if (LE == 0)
 		begin
 			if (piso_m == 0) //piso 1
 				begin

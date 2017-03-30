@@ -1,5 +1,4 @@
 
-# PlanAhead Generated IO constraints 
 
 NET "B2" IOSTANDARD = LVCMOS33;
 NET "B4" IOSTANDARD = LVCMOS33;
@@ -12,7 +11,6 @@ NET "rst" IOSTANDARD = LVCMOS33;
 NET "S1" IOSTANDARD = LVCMOS33;
 NET "S2" IOSTANDARD = LVCMOS33;
 
-# PlanAhead Generated physical constraints 
 
 NET "B2" LOC = V8;
 NET "S2" LOC = U8;
@@ -25,3 +23,20 @@ NET "piso2" LOC = B8;
 NET "piso3" LOC = A8;
 NET "piso4" LOC = D9;
 NET "rst" LOC = C4;
+
+# PlanAhead Generated physical constraints 
+
+NET "DISPLAY[0]" LOC = L14;
+NET "DISPLAY[1]" LOC = N14;
+NET "DISPLAY[2]" LOC = M14;
+NET "DISPLAY[3]" LOC = U18;
+NET "DISPLAY[4]" LOC = U17;
+NET "DISPLAY[5]" LOC = T18;
+NET "DISPLAY[6]" LOC = T17;
+
+
+NET "ANODES[0]" LOC = N16;
+NET "ANODES[3]" LOC = P17;
+NET "ANODES[2]" LOC = P18;
+NET "ANODES[1]" LOC = N15;
+NET "clk" LOC = V10;

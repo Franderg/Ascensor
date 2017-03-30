@@ -1,24 +1,15 @@
 `timescale 1ns / 1ps
 
-module fpgadisplay_controller(
-	output reg[6:0] DISPLAY, 
-	output reg[3:0] DIGITS,
-	
-	input CLK);
-
-	wire [3:0] N_PISO, PISO, PUERTAS, ACCION;//se pueden dejar o quitar, depende la implementacion
-	
-	wire [6:0] DISPLAY3, DISPLAY2, DISPLAY1, DISPLAY0;
-	
-	/* Se define el deco de cada display, el modulo es bcd_to_display deco de cada display y (salida, entrada)
-	Las entradas son el numero de piso, si sube o baja, puertas abiertas o cerradas...
-	
-	bcd_to_display decoX (DISPLAYX,entradas); lo que varia en cada uno es la entrada
-	*/
-	bcd_to_display deco3 (DISPLAY3,5);
-	bcd_to_display deco2 (DISPLAY2,7);
-	bcd_to_display deco1 (DISPLAY1,9);
-	bcd_to_display deco0 (DISPLAY0,1);
+module display_refresher(
+	input clk,
+   input DISPLAY1,
+	input DISPLAY2,
+	input DISPLAY3,
+	input DISPLAY4,
+	output reg [6:0] DISPLAY, 
+	output reg [3:0] ANODES,
+	output reg contador_seg
+	);
 	
 	/* HERE STARTS THE REFRESHING MACHINE */
 	
@@ -34,12 +25,18 @@ module fpgadisplay_controller(
 	(* keep="soft" *)
 	wire CLK_2Hz;
 	wire CLK_1KHz;
-	frequency_divider divisor (CLK_1Hz, CLK_2Hz, CLK_1KHz, CLK);
+	frequency_divider divisor (CLK_1Hz, CLK_2Hz, CLK_1KHz, clk);
 
 	always @ (posedge CLK_1KHz) begin
 		Prstate = Nxtstate;
 	end
 	
+	always @ (posedge CLK_1Hz)
+		begin
+			contador_seg = contador_seg + 1;
+			if (contador_seg == 10)
+				contador_seg = 0;
+		end
 	
 	always @ (Prstate)
 		case (Prstate)
@@ -54,27 +51,27 @@ module fpgadisplay_controller(
 		case (Prstate)
 			S0: // 1,2,3 o 4, en caso de espera es in -
 				begin 
-					DIGITS = 4'b1110;//se indica con un 0 el display 
-					DISPLAY = DISPLAY0;
+					ANODES = 4'b1110;//se indica con un 0 el display 
+					DISPLAY = DISPLAY1;
 				end
 			S1: // P
 				begin 
-					DIGITS = 4'b1101;
-					DISPLAY = DISPLAY1;
+					ANODES = 4'b1101;
+					DISPLAY = DISPLAY2;
 				end
 			S2: // A o C
 				begin 
-					DIGITS = 4'b1011;
-					DISPLAY = DISPLAY2;
+					ANODES = 4'b1011;
+					DISPLAY = DISPLAY3;
 				end
 			S3: // S o B
 				begin 
-					DIGITS = 4'b0111;
-					DISPLAY = DISPLAY3;
+					ANODES = 4'b0111;
+					DISPLAY = DISPLAY4;
 				end
 			default: 
 				begin // por defecto esta en espera ----
-					DIGITS = 4'b0000;
+					ANODES = 4'b0000;
 					DISPLAY = 7'b1111110;
 				end
 		endcase

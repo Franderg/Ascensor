@@ -34,7 +34,11 @@ module manejo_entradas(
 	output reg [3:0] boton_pres
     );
 
-always @ (posedge piso1 or posedge piso2 or posedge piso3 or posedge piso4 or posedge S1 or posedge B2 or posedge S2 or posedge B3 or posedge S3 or posedge B4)
+initial begin
+	boton_pres <= 0;
+end
+
+always @ (posedge clk)//posedge piso1 or posedge piso2 or posedge piso3 or posedge piso4 or posedge S1 or posedge B2 or posedge S2 or posedge B3 or posedge S3 or posedge B4)
 	begin
 		if (piso1 == 1)
 			boton_pres = 1;
@@ -56,6 +60,8 @@ always @ (posedge piso1 or posedge piso2 or posedge piso3 or posedge piso4 or po
 			boton_pres = 9;
 		else if (B4 == 1)
 			boton_pres = 10;
+		else
+			boton_pres = 0;
 	end
 
 endmodule
