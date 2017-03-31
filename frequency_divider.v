@@ -21,9 +21,9 @@ module frequency_divider(output CLK_1Hz, output CLK_2Hz, output CLK_1KHz, input 
 
 	always @ (posedge CLK)
 		begin
-			count_1Hz = {count_1Hz+1}[26:0];
-			count_2Hz = {count_2Hz+1}[25:0];
-			count_1KHz = {count_1KHz+1}[16:0];
+			count_1Hz = count_1Hz+1;
+			count_2Hz = count_2Hz+1;
+			count_1KHz = count_1KHz+1;
 		end
 	
 	assign CLK_1Hz = count_1Hz[26];

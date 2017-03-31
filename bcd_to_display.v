@@ -5,25 +5,39 @@
 
 module bcd_to_display(
 	input clk,
-	output reg[6:0] DISPLAY,
-	input [3:0] BCD
+	input rst,
+	input [3:0] BCD,
+	output reg[7:0] DISPLAY
 	);
+	
+initial begin
+	DISPLAY = 8'b11111111;
+	#10 DISPLAY = 8'b00000000;
+end
 
-	always @ (posedge clk) 
+	always @ (posedge clk)
 		begin
-			case (BCD)	
-				0:	DISPLAY = 7'b1111110;//  ---- espera
-				1: DISPLAY = 7'b1001111;//  Piso 1
-				2: DISPLAY = 7'b0010010;//  Piso 2
-				3: DISPLAY = 7'b0000110;//  Piso 3
-				4: DISPLAY = 7'b1001100;//  Piso 4
-				5: DISPLAY = 7'b0100100;//  Sube
-				6: DISPLAY = 7'b0001000;//  Abierto
-				7: DISPLAY = 7'b0110001;//  Cerrado
-				8: DISPLAY = 7'b0000000;//  Baja
-				9: DISPLAY = 7'b0011000;//  indica el Piso
-				default: DISPLAY = 7'b0;
-			endcase
+			if (rst == 1)
+				begin
+					DISPLAY = 8'b11111111;
+					#10 DISPLAY = 8'b00000000;
+				end
+			else
+				begin
+					case (BCD)	
+						4'b0000:	DISPLAY = 8'b11111110;//  ---- espera
+						4'b0001: DISPLAY = 8'b11001111;//  Piso 1
+						4'b0010: DISPLAY = 8'b10010010;//  Piso 2
+						4'b0011: DISPLAY = 8'b10000110;//  Piso 3
+						4'b0100: DISPLAY = 8'b11001100;//  Piso 4
+						4'b0101: DISPLAY = 8'b10100100;//  Sube
+						4'b0110: DISPLAY = 8'b10001000;//  Abierto
+						4'b0111: DISPLAY = 8'b10110001;//  Cerrado
+						4'b1000: DISPLAY = 8'b10000000;//  Baja
+						4'b1001: DISPLAY = 8'b10011000;//  indica el Piso
+						default: DISPLAY = 8'b0;
+					endcase
+				end
 		end
 
 endmodule

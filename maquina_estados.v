@@ -26,7 +26,7 @@ module maquina_estados(
 	 input B3,
 	 input S3,
 	 input B4,
-	 output reg[6:0] DISPLAY, 
+	 output reg[7:0] DISPLAY, 
 	 output reg[3:0] ANODES
     );
 
@@ -42,23 +42,39 @@ module maquina_estados(
 	wire [3:0] memoria; //registro con la siguiente instruccion para la maquina de estados
 	reg [3:0] contador_seg = 0;
 	reg [26:0] contador_ciclos = 0;
-	integer memoria_input;
-	wire [3:0] boton_pres1;
+	//integer memoria_input;
+	//wire [3:0] boton_pres1;
 	wire [3:0] boton_pres; //entradas donde se guardan todos los botones de los pisos
 	wire [3:0] BCD4, BCD3, BCD2, BCD1;
-	wire [6:0] DISPLAY4, DISPLAY3, DISPLAY2, DISPLAY1;
+	wire [7:0] DISPLAY4, DISPLAY3, DISPLAY2, DISPLAY1;
 		
-	reg [1:0] piso; //Indica el piso actual, 0, 1, 2, 3
-	reg [1:0] accion; //Indica si está subiendo o bajando, 0 no se mueve, 1 sube y 2 baja
-	reg puertas; //Indica si las puertas están abiertas o cerradas, 0 cerradas, 1 abiertas
+	reg [1:0] piso = 0; //Indica el piso actual, 0, 1, 2, 3
+	reg [1:0] accion = 0; //Indica si está subiendo o bajando, 0 no se mueve, 1 sube y 2 baja
+	reg puertas = 0; //Indica si las puertas están abiertas o cerradas, 0 cerradas, 1 abiertas
 	
-	assign boton_pres1 = boton_pres;
+	//assign boton_pres1 = boton_pres;
 	
 	reg LE = 1;
 
-	initial begin
-		memoria_input = 0;
-	end
+			/* HERE STARTS THE REFRESHING MACHINE */
+	
+	reg [1:0] Prstate, Nxtstate;
+	parameter State0 = 2'b00, State1 = 2'b01, State2 = 2'b10, State3 = 2'b11;
+
+	initial 
+		begin
+			Prstate = State0; 
+			
+		end
+	
+	
+	//frecuencia de cambio entre cada display (agregar al informe, en el manual de Xilinx de la Nexys3 viene)
+	(* keep="soft" *)
+	wire CLK_1Hz;
+	(* keep="soft" *)
+	wire CLK_2Hz;
+	wire CLK_1KHz;
+	frequency_divider divisor (CLK_1Hz, CLK_2Hz, CLK_1KHz, clk);
 
 	manejo_entradas entradas(
 	clk,
@@ -76,41 +92,19 @@ module maquina_estados(
     );
 	 
 	 manejo_memoria memory(
-    .clk(clk),
-	 .LE(LE),
-	 .puertas_m(puertas_m),
-	 .accion_m(accion_m),
-    .piso_m(piso_m), //piso actual
-	 .boton_pres(boton_pres1), //boton que se presiona
-	 .memoria(memoria) //registro con la siguiente instruccion para la maquina de estados
+    clk,
+	 rst,
+	 LE,
+	 puertas,
+	 accion,
+    piso, //piso actual
+	 boton_pres, //boton que se presiona
+	 memoria //registro con la siguiente instruccion para la maquina de estados
     );
-	 
-	 bcd_to_display deco1(
-	 clk,
-	 DISPLAY4,
-	 BCD1
-	 );
-	 
-	 bcd_to_display deco2(
-	 clk,
-	 DISPLAY3,
-	 BCD2
-	 );
-	 
-	 bcd_to_display deco3(
-	 clk,
-	 DISPLAY2,
-	 BCD3
-	 );
-	 
-	 bcd_to_display deco4(
-	 clk,
-	 DISPLAY1,
-	 BCD4
-	 );
 	 
 	 acciones_to_bcd obtenerbcd(
 	 clk,
+	 rst,
 	 piso,
 	 accion,
 	 puertas,
@@ -118,6 +112,34 @@ module maquina_estados(
 	 BCD2,
 	 BCD3,
 	 BCD4
+	 );
+	 
+	 bcd_to_display deco1(
+	 clk,
+	 rst,
+	 BCD1,
+	 DISPLAY4
+	 );
+	 
+	 bcd_to_display deco2(
+	 clk,
+	 rst,
+	 BCD2,
+	 DISPLAY3
+	 );
+	 
+	 bcd_to_display deco3(
+	 clk,
+	 rst,
+	 BCD3,
+	 DISPLAY2
+	 );
+	 
+	 bcd_to_display deco4(
+	 clk,
+	 rst,
+	 BCD4,
+	 DISPLAY1
 	 );
 	
 	always @ (posedge clk)
@@ -128,23 +150,23 @@ module maquina_estados(
 	            piso = 0;
 	            puertas = 0;	
 				   e_actual = P1;
+					LE = 1;
 				end
 			else			
 				begin
+					LE = 1;
 					if (contador_seg == 10)
 						begin
 						   LE = 0;
-						   accion_m <= accion;
-							piso_m <= piso;
-							puertas_m <= puertas;
-							obtener = 1;
-							#100 obtener = 0;
-							memoria_input = memoria;
+						   //accion_m = accion;
+							//piso_m = piso;
+							//puertas_m = puertas;
+							//memoria_input = memoria;
 							case(e_actual)
 							
 				//************ Estado: Piso 1*****************//
 								P1:begin
-									case(memoria_input)
+									case(memoria)
 										0:begin
 												piso = 0;
 												accion = 0;
@@ -170,7 +192,7 @@ module maquina_estados(
 
 				//************ Estado: Piso 2*****************//
 								P2:begin
-									case(memoria_input)
+									case(memoria)
 										0:begin
 												piso = 1; //piso 2
 												accion = 0; //nada
@@ -202,7 +224,7 @@ module maquina_estados(
 									
 				//************ Estado: Piso 3*****************//
 								P3:begin
-									case(memoria_input)
+									case(memoria)
 										0:begin
 												piso = 2; //piso 3
 												accion = 0; //nada
@@ -234,7 +256,7 @@ module maquina_estados(
 
 				//************ Estado: Piso 4*****************//
 								P4:begin
-									case(memoria_input)
+									case(memoria)
 										0:begin
 												piso = 3; //piso 4
 												accion = 0; //nada
@@ -262,9 +284,8 @@ module maquina_estados(
 								default: e_siguiente=P1;//por defecto estÃ¡ en el piso 1
 							endcase
 							e_actual = e_siguiente;
+							
 						end
-					else
-						LE = 1;
 				end
 		end
 
@@ -272,42 +293,26 @@ module maquina_estados(
 		begin
 			if (rst)
 				begin
-					contador_ciclos <= 27'b0;
+					contador_ciclos = 27'b0;
+					contador_seg = 4'b0;
 				end
 			else
 				begin
-					contador_ciclos <= contador_ciclos + 1;
+					contador_ciclos = contador_ciclos + 4'b000000000000000000000000001;
 					if (contador_ciclos == 100000000)
 						begin
-							contador_ciclos <= 27'b0;
-							contador_seg <= contador_seg + 1;
+							contador_ciclos = 27'b0;
+							contador_seg = contador_seg + 4'b0001;
 							if (contador_seg == 11)
-								contador_seg <= 4'b0001;
+								contador_seg = 4'b0001;
 						end
 				end
 		end
 		
-			/* HERE STARTS THE REFRESHING MACHINE */
-	
-	reg [1:0] Prstate, Nxtstate;
-	parameter State0 = 2'b00, State1 = 2'b01, State2 = 2'b10, State3 = 2'b11;
 
-	initial begin Prstate = State0; end
-	
-	
-	//frecuencia de cambio entre cada display (agregar al informe, en el manual de Xilinx de la Nexys3 viene)
-	(* keep="soft" *)
-	wire CLK_1Hz;
-	(* keep="soft" *)
-	wire CLK_2Hz;
-	wire CLK_1KHz;
-	frequency_divider divisor (CLK_1Hz, CLK_2Hz, CLK_1KHz, clk);
 
 	always @ (posedge CLK_1KHz) begin
 		Prstate = Nxtstate;
-	end
-	
-	always @ (Prstate)
 		case (Prstate)
 			State0: Nxtstate = State1;
 			State1: Nxtstate = State2;
@@ -315,8 +320,9 @@ module maquina_estados(
 			State3: Nxtstate = State0;
 			default: Nxtstate = State0;
 		endcase
+	end		
 	
-	always @ (*)
+	always @ (posedge clk)
 		case (Prstate)
 			State0: // 1,2,3 o 4, en caso de espera es in -
 				begin 
