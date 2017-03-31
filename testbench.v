@@ -4,9 +4,9 @@
 // Company: 
 // Engineer:
 //
-// Create Date:   11:10:28 03/31/2017
+// Create Date:   11:45:30 03/31/2017
 // Design Name:   maquina_estados
-// Module Name:   C:/Users/Pelo/Documents/ISE/Proyecto2/testbench.v
+// Module Name:   C:/Users/Pelo/Documents/Projects/testbench.v
 // Project Name:  Proyecto2
 // Target Device:  
 // Tool versions:  
@@ -41,6 +41,11 @@ module testbench;
 	// Outputs
 	wire [7:0] DISPLAY;
 	wire [3:0] ANODES;
+	/*wire [1:0] piso;
+	wire [1:0] accion;
+	wire puertas;
+	wire [3:0] contador_seg;
+	wire [3:0] memoria_m;*/
 
 	// Instantiate the Unit Under Test (UUT)
 	maquina_estados uut (
@@ -57,7 +62,12 @@ module testbench;
 		.S3(S3), 
 		.B4(B4), 
 		.DISPLAY(DISPLAY), 
-		.ANODES(ANODES)
+		.ANODES(ANODES), 
+/*		.piso(piso), 
+		.accion(accion), 
+		.puertas(puertas),
+		.contador_seg(contador_seg),
+		.memoria_m(memoria_m)*/
 	);
 
 	initial begin
@@ -77,20 +87,23 @@ module testbench;
 
 		// Wait 100 ns for global reset to finish
 		#100;
-		#1000 rst = 1;
-		#1000 rst = 0;
-		#1000 piso2 = 1;
-		#1000 piso2 = 0;
-		
+				#10 rst = 1;
+		#10 rst = 0;
+		#10 piso2 = 1;
+		#10 piso2 = 0;
         
 		// Add stimulus here
 
 	end
-	
-	always
-		begin
-		clk =~ clk;
+      
+always
+	begin
+		#1 clk <= ~clk;
 	end
+
+        
+		// Add stimulus here
+
       
 endmodule
 

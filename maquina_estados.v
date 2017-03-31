@@ -28,6 +28,11 @@ module maquina_estados(
 	 input B4,
 	 output reg[7:0] DISPLAY, 
 	 output reg[3:0] ANODES
+	/* output reg [1:0] piso, //Indica el piso actual, 0, 1, 2, 3
+	 output reg [1:0] accion, //Indica si está subiendo o bajando, 0 no se mueve, 1 sube y 2 baja
+	 output reg puertas, //Indica si las puertas están abiertas o cerradas, 0 cerradas, 1 abiertas
+	 output reg [3:0] contador_seg,
+	 output reg [3:0] memoria_m*/
     );
 
 	parameter P1=0, P2=1, P3=2, P4=3; //Estados
@@ -40,17 +45,20 @@ module maquina_estados(
 	reg [1:0] accion_m = 0;
    reg [1:0] piso_m = 0; //piso actual
 	wire [3:0] memoria; //registro con la siguiente instruccion para la maquina de estados
-	reg [3:0] contador_seg = 0;
+
 	reg [26:0] contador_ciclos = 0;
 	//integer memoria_input;
 	//wire [3:0] boton_pres1;
 	wire [3:0] boton_pres; //entradas donde se guardan todos los botones de los pisos
 	wire [3:0] BCD4, BCD3, BCD2, BCD1;
 	wire [7:0] DISPLAY4, DISPLAY3, DISPLAY2, DISPLAY1;
+	
+	reg [1:0] piso = 0;
+	reg [1:0] accion = 0;
+	reg puertas = 0;
+	reg [3:0] contador_seg = 0;
 		
-	reg [1:0] piso = 0; //Indica el piso actual, 0, 1, 2, 3
-	reg [1:0] accion = 0; //Indica si está subiendo o bajando, 0 no se mueve, 1 sube y 2 baja
-	reg puertas = 0; //Indica si las puertas están abiertas o cerradas, 0 cerradas, 1 abiertas
+	
 	
 	//assign boton_pres1 = boton_pres;
 	
@@ -63,8 +71,12 @@ module maquina_estados(
 
 	initial 
 		begin
-			Prstate = State0; 
-			
+			Prstate = State0;
+			piso = 0;
+			accion = 0;
+			puertas = 0;
+			contador_seg = 0;
+			//memoria_m = 0;
 		end
 	
 	
@@ -151,12 +163,19 @@ module maquina_estados(
 	            puertas = 0;	
 				   e_actual = P1;
 					LE = 1;
+					contador_seg = 4'b0;
 				end
 			else			
 				begin
+					//memoria_m = memoria;
 					LE = 1;
-					if (contador_seg == 10)
+					if (contador_ciclos == 100000000)
 						begin
+							contador_seg = contador_seg + 4'b0001;
+						end
+					else if (contador_seg == 10)
+						begin
+							contador_seg = 4'b0;
 						   LE = 0;
 						   //accion_m = accion;
 							//piso_m = piso;
@@ -294,17 +313,13 @@ module maquina_estados(
 			if (rst)
 				begin
 					contador_ciclos = 27'b0;
-					contador_seg = 4'b0;
 				end
 			else
 				begin
 					contador_ciclos = contador_ciclos + 4'b000000000000000000000000001;
-					if (contador_ciclos == 100000000)
+					if (contador_ciclos == 100000100)
 						begin
 							contador_ciclos = 27'b0;
-							contador_seg = contador_seg + 4'b0001;
-							if (contador_seg == 11)
-								contador_seg = 4'b0001;
 						end
 				end
 		end
