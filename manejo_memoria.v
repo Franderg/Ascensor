@@ -107,17 +107,17 @@ always @ (posedge clk)
 											for (contador = 0; contador <= 10; contador = contador + 1)
 												if (RAM[contador] == 1 || RAM[contador] == 5)
 													begin
+														RAM[contador] = 0;
 														if (puertas_m == 0)
 															begin
 																indice_encontrado = contador;
 																memoria = RAM[contador];
 															end
-														RAM[contador] = 0;
 													end
 											if (indice_encontrado == 11)
 												begin
 													for (contador = 10; contador >= 0; contador = contador - 1)
-														if (RAM[contador] != 0)
+														if (RAM[contador] == 2 || RAM[contador] == 3 || RAM[contador] == 4 || RAM[contador] == 6 || RAM[contador] == 7 || RAM[contador] == 8 || RAM[contador] == 9 || RAM[contador] == 10)
 															begin
 																memoria = RAM[contador];
 																indice_encontrado = contador;
@@ -126,7 +126,7 @@ always @ (posedge clk)
 														memoria = 0;
 												end
 										end
-									else if (accion_m == 1)
+									else if (accion_m == 1)//va subiendo
 										begin
 											indice_encontrado = 11;
 											for (contador = 0; contador <= 10; contador = contador + 1)
@@ -139,7 +139,7 @@ always @ (posedge clk)
 											if (indice_encontrado == 11)
 												begin
 													for (contador = 10; contador >= 0; contador = contador - 1)
-														if (RAM[contador] != 0 || RAM[contador] != 1 || RAM[contador] != 5)
+														if (RAM[contador] == 3 || RAM[contador] == 4 || RAM[contador] == 6 || RAM[contador] == 8 || RAM[contador] == 9 || RAM[contador] == 10)
 															begin
 																memoria = RAM[contador];
 																indice_encontrado = contador;
@@ -157,17 +157,17 @@ always @ (posedge clk)
 											for (contador = 0; contador <= 10; contador = contador + 1)
 												if (RAM[contador] == 2 || RAM[contador] == 6 || RAM[contador] == 7)
 													begin
+														RAM[contador] = 0;
 														if (puertas_m == 0)
 															begin
 																indice_encontrado = contador;
 																memoria = RAM[contador];
 															end
-														RAM[contador] = 0;
 													end
 											if (indice_encontrado == 11)
 												begin
 													for (contador = 10; contador >= 0; contador = contador - 1)
-														if (RAM[contador] != 0)
+														if (RAM[contador] == 1 || RAM[contador] == 3 || RAM[contador] == 4 || RAM[contador] == 5 || RAM[contador] == 8 || RAM[contador] == 9 || RAM[contador] == 10)
 															begin
 																memoria = RAM[contador];
 																indice_encontrado = contador;
@@ -176,7 +176,7 @@ always @ (posedge clk)
 														memoria = 0;
 												end
 										end
-									else if (accion_m == 1)
+									else if (accion_m == 1)//sube
 										begin
 											indice_encontrado = 11;
 											for (contador = 0; contador <= 10; contador = contador + 1)
@@ -198,7 +198,7 @@ always @ (posedge clk)
 														memoria = 0;
 												end
 										end
-									else if (accion_m == 2)
+									else if (accion_m == 2)//baja
 										begin
 											indice_encontrado = 11;
 											for (contador = 0; contador <= 10; contador = contador + 1)
@@ -220,17 +220,17 @@ always @ (posedge clk)
 											for (contador = 0; contador <= 10; contador = contador + 1)
 												if (RAM[contador] == 3 || RAM[contador] == 8 || RAM[contador] == 9)
 													begin
+														RAM[contador] = 0;
 														if (puertas_m == 0)
 															begin
 																indice_encontrado = contador;
 																memoria = RAM[contador];
 															end
-														RAM[contador] = 0;
 													end
 											if (indice_encontrado == 11)
 												begin
 													for (contador = 10; contador >= 0; contador = contador - 1)
-														if (RAM[contador] != 0)
+														if (RAM[contador] == 2 || RAM[contador] == 1 || RAM[contador] == 4 || RAM[contador] == 6 || RAM[contador] == 7 || RAM[contador] == 5 || RAM[contador] == 10)
 															begin
 																memoria = RAM[contador];
 																indice_encontrado = contador;
@@ -283,17 +283,17 @@ always @ (posedge clk)
 											for (contador = 0; contador <= 10; contador = contador + 1)
 												if (RAM[contador] == 4 || RAM[contador] == 10)
 													begin
+														RAM[contador] = 0;
 														if (puertas_m == 0)
 															begin
 																indice_encontrado = contador;
 																memoria = RAM[contador];
 															end
-														RAM[contador] = 0;
 													end
 											if (indice_encontrado == 11)
 												begin
 													for (contador = 10; contador >= 0; contador = contador - 1)
-														if (RAM[contador] != 0)
+														if (RAM[contador] == 2 || RAM[contador] == 3 || RAM[contador] == 1 || RAM[contador] == 6 || RAM[contador] == 7 || RAM[contador] == 8 || RAM[contador] == 9 || RAM[contador] == 5)
 															begin
 																memoria = RAM[contador];
 																indice_encontrado = contador;
@@ -302,12 +302,12 @@ always @ (posedge clk)
 														memoria = 0;
 												end
 										end
-									else if (accion_m == 2)
+									else if (accion_m == 2)//baja
 										begin
 											indice_encontrado = 11;
 											for (contador = 0; contador <= 10; contador = contador + 1)
 												if (RAM[contador] == 3 || RAM[contador] == 8)
-													begin																			
+													begin																	
 														indice_encontrado = contador;
 														memoria = RAM[contador];
 														RAM[contador] = 0;
@@ -315,7 +315,7 @@ always @ (posedge clk)
 											if (indice_encontrado == 11)
 												begin
 													for (contador = 10; contador >= 0; contador = contador - 1)
-														if (RAM[contador] != 0 || RAM[contador] != 4 || RAM[contador] != 10)
+														if (RAM[contador] == 1 || RAM[contador] == 2 || RAM[contador] == 5 || RAM[contador] == 6 || RAM[contador] == 7 || RAM[contador] == 9)
 															begin
 																memoria = RAM[contador];
 																indice_encontrado = contador;

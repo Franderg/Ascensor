@@ -3,17 +3,17 @@
 
 
 module maquina_estados(
-	 //0: nadie ha mandado nada
+	 //0: nadie ha mandado nada//
 	 //1: ir a piso 1
 	 //2: ir a piso 2
-	 //3: ir a piso 3
-	 //4: ir a piso 4
+	 //3: ir a piso 3//
+	 //4: ir a piso 4//
 	 //5: piso 1, botón de subir
 	 //6: piso 2, botón de bajar
 	 //7: piso 2, botón de subir
-	 //8: piso 3, botón de bajar
+	 //8: piso 3, botón de bajar//
 	 //9: piso 3, botón de subir
-	 //10: piso 4, botón de bajar
+	 //10: piso 4, botón de bajar//
 	 input clk, //clock
 	 input rst, //reset
 	 input piso1,
@@ -173,7 +173,7 @@ module maquina_estados(
 						begin
 							contador_seg = contador_seg + 4'b0001;
 						end
-					else if (contador_seg == 10)
+					else if (contador_seg == 2)
 						begin
 							contador_seg = 4'b0;
 						   LE = 0;
@@ -181,6 +181,7 @@ module maquina_estados(
 							//piso_m = piso;
 							//puertas_m = puertas;
 							//memoria_input = memoria;
+							#200;
 							case(e_actual)
 							
 				//************ Estado: Piso 1*****************//

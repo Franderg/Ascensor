@@ -17,7 +17,7 @@ end
 
 	always @ (posedge clk)
 		begin
-			if (rst == 1)
+			if (rst)
 				begin
 					DISPLAY = 8'b11111111;
 					#10 DISPLAY = 8'b00000000;
