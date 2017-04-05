@@ -41,9 +41,6 @@ module maquina_estados(
 	reg [1:0] e_siguiente = P1; // estado siguiente
 	reg agregar = 0;
 	reg obtener = 0;
-	reg puertas_m = 0;
-	reg [1:0] accion_m = 0;
-   reg [1:0] piso_m = 0; //piso actual
 	wire [3:0] memoria; //registro con la siguiente instruccion para la maquina de estados
 
 	reg [26:0] contador_ciclos = 0;
@@ -187,7 +184,8 @@ module maquina_estados(
 				//************ Estado: Piso 1*****************//
 								P1:begin
 									case(memoria)
-										0:begin
+										0:
+											begin
 												piso = 0;
 												accion = 0;
 												puertas = 0;
@@ -200,7 +198,8 @@ module maquina_estados(
 												puertas = 1;
 												e_siguiente=P1;
 											end
-										2,3,4,6,7,8,9,10:begin
+										2,3,4,6,7,8,9,10:
+											begin
 												piso = 0; //piso1
 												accion = 1; //sube
 												puertas = 0; //cerra	das

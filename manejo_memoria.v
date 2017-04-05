@@ -80,10 +80,12 @@ always @ (posedge clk)
 						RAM[11] = 0;
 					else
 						for (contador = 0; contador <= 10; contador = contador + 1)
-							if (RAM[contador] == boton_pres)
-								begin
-									indice_encontrado = contador;
-								end
+							begin
+								if (RAM[contador] == boton_pres)
+									begin
+										indice_encontrado = contador;
+									end
+							end
 						if (indice_encontrado == 11)
 							begin
 								for (contador = 10; contador >= 0; contador = contador - 1)
@@ -105,15 +107,17 @@ always @ (posedge clk)
 										begin
 											indice_encontrado = 11;
 											for (contador = 0; contador <= 10; contador = contador + 1)
-												if (RAM[contador] == 1 || RAM[contador] == 5)
-													begin
-														RAM[contador] = 0;
-														if (puertas_m == 0)
-															begin
-																indice_encontrado = contador;
-																memoria = RAM[contador];
-															end
-													end
+												begin
+													if (RAM[contador] == 1 || RAM[contador] == 5)
+														begin
+															RAM[contador] = 0;
+															if (puertas_m == 0)
+																begin
+																	indice_encontrado = contador;
+																	memoria = 1;
+																end
+														end
+												end
 											if (indice_encontrado == 11)
 												begin
 													for (contador = 10; contador >= 0; contador = contador - 1)
@@ -161,7 +165,7 @@ always @ (posedge clk)
 														if (puertas_m == 0)
 															begin
 																indice_encontrado = contador;
-																memoria = RAM[contador];
+																memoria = 2;
 															end
 													end
 											if (indice_encontrado == 11)
@@ -224,7 +228,7 @@ always @ (posedge clk)
 														if (puertas_m == 0)
 															begin
 																indice_encontrado = contador;
-																memoria = RAM[contador];
+																memoria = 3;
 															end
 													end
 											if (indice_encontrado == 11)
@@ -287,7 +291,7 @@ always @ (posedge clk)
 														if (puertas_m == 0)
 															begin
 																indice_encontrado = contador;
-																memoria = RAM[contador];
+																memoria = 4;
 															end
 													end
 											if (indice_encontrado == 11)
